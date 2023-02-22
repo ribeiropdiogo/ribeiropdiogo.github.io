@@ -11,49 +11,38 @@ redirect_from:
 
 Education
 ======
-* B.S. in GitHub, GitHub University, 2012
-* M.S. in Jekyll, GitHub University, 2014
-* Ph.D in Version Control Theory, GitHub University, 2018 (expected)
+* B.S. in Informatics Engineering, University of Minho, 2020
+* M.S. in Informatics Engineering, University of Minho, 2022
+* Ph.D in Informatics, University of Minho, 2027 (expected)
 
-Work experience
+Work Experience
 ======
-* Summer 2015: Research Assistant
-  * Github University
-  * Duties included: Tagging issues
-  * Supervisor: Professor Git
+* 10/2022 - Current: Research Assistant
+  * HasLab INESC TEC
 
-* Fall 2015: Research Assistant
-  * Github University
-  * Duties included: Merging pull requests
-  * Supervisor: Professor Hub
+* 07/2022 - 10/2021: External Research Assistant
+  * HasLab INESC TEC
+
+* 06/2022 - 07/2022: Junior Software Engineer
+  * VILT
+
+* 09/2021 - 06/2022: Engineering Trainee
+  * VILT
+
+* 04/2021 - 09/2021: Research Assistant
+  * HasLab INESC TEC
   
 Skills
 ======
-* Skill 1
-* Skill 2
-  * Sub-skill 2.1
-  * Sub-skill 2.2
-  * Sub-skill 2.3
-* Skill 3
+* Teamwork
+* Creative
+* Motivated
+* Eager to Learn
+* Positive
 
 Publications
 ======
   <ul>{% for post in site.publications %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
-  
-Talks
-======
-  <ul>{% for post in site.talks %}
-    {% include archive-single-talk-cv.html %}
-  {% endfor %}</ul>
-  
-Teaching
-======
-  <ul>{% for post in site.teaching %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
-  
-Service and leadership
-======
-* Currently signed in to 43 different slack teams
+
