@@ -8,9 +8,13 @@ redirect_from:
   - /about.html
 ---
 
-Since 2022, I'm a Research Assistant at the High-Assurance Software Laboratory located at the Gualtar Campus of the University of Minho in Braga. Some of the topics I have been working with range from Security topics to Distributed Systems. I finished my Master's degree in Software Engineering at the University of Minho in 2022, and I'm currently attending the Doctorate in Informatics at the same institution.
+My name is Diogo, and I am a Research Assistant at the High-Assurance Software Laboratory at the University of Minho’s Gualtar Campus. In addition to my research work, I am also an Invited Assistant at the University of Minho, where I teach courses related to cryptography, security, and informatics laboratories. My current research focuses on truth discovery and reputation systems, areas that I find both challenging and highly relevant in today's digital landscape.
 
-My favorite hobbies range from practicing sports like football, futsal, boxing, mountain biking, and running, to activities such as traveling and exploring new places. I'm a big fan of motorsports (either on 2 or 4 wheels) and I love outdoor activities. I'm always interested in new challenges and learning new stuff. I consider myself a hard worker and a motivated person, being that the desire to learn and discover new things is what drives me.
+I hold a Master’s degree in Informatics Engineering from the University of Minho, where I am currently pursuing my Doctorate in Informatics. My academic journey has been driven by a strong passion for technology, problem-solving, and innovation. I am always eager to deepen my knowledge and contribute to advancements in my field.
+
+Outside of my professional and academic pursuits, I am deeply passionate about sports, particularly cycling and football, both of which I actively practice. I find that sports not only keep me physically active but also help me develop discipline, resilience, and a competitive mindset—qualities that are equally valuable in my research. In addition, I have a strong interest in motorsports and enjoy following the latest developments in the field.
+
+I am always looking for new challenges and opportunities to grow, whether through research, teaching, or personal projects. My curiosity and drive to learn are what keep me motivated every day.
 
 
 For more info

@@ -17,6 +17,9 @@ Education
 
 Work Experience
 ======
+* 02/2024 - Current: Invited Assistant
+  * University of Minho
+
 * 10/2022 - Current: Research Assistant
   * HasLab INESC TEC
 
@@ -31,8 +34,21 @@ Work Experience
 
 * 04/2021 - 09/2021: Research Assistant
   * HasLab INESC TEC
-  
-Skills
+
+Hard-Skills
+======
+* Distributed System
+* Information Security
+* Truth Discovery
+* Reputation Systems
+* Data Fusion
+* Application Engineering
+* Programming
+* Operating Systems
+* Scripting
+* Databases
+
+Soft-Skills
 ======
 * Teamwork
 * Creative
