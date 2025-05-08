@@ -40,7 +40,7 @@ author:
   semantic         : # URL
   pubmed           : #"https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
   researchgate     : "https://www.researchgate.net/profile/Diogo-Ribeiro-32"
-  scopus           : # URL
+  scopus           : "https://www.scopus.com/authid/detail.uri?authorId=58711153100"
 
   # Repositories and software development
   bitbucket        : # Username - Update with your username on the site
