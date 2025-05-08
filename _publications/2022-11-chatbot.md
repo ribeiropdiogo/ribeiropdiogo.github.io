@@ -5,12 +5,13 @@ category: conferences
 permalink: /publication/2022-11-chatbot
 excerpt: ''
 date: 2022-11-04
-venue: 'International Conferences on Applied Computing 2022 and WWW/Internet 2022'
+venue: '19th International Conference on Applied Computing'
 slidesurl: ''
-paperurl: 'https://www.computing-conf.org/wp-content/uploads/2022/11/3_AC2022_F_018.pdf'
-citation: 'Diogo, Ribeiro. (2022). "Design And Implementation Of A Chatbot As A Tool To Assist A Helpdesk Team." <i>International Conferences on Applied Computing 2022 and WWW/Internet</i>.'
+paperurl: 'https://doi.org/10.33965/ac_icwi2022_202208l017'
+bibtexurl: 'https://ribeiropdiogo.github.io/files/ac2022.bib'
+citation: 'Ribeiro, Diogo. (2022). "Design And Implementation Of A Chatbot As A Tool To Assist A Helpdesk Team." <i>19th International Conference on Applied Computing</i>.'
 ---
 
-[Download paper here](https://www.computing-conf.org/wp-content/uploads/2022/11/3_AC2022_F_018.pdf)
+[Download paper here](https://doi.org/10.33965/ac_icwi2022_202208l017)
 
-Recommended citation: Diogo, Ribeiro. (2022). "Design And Implementation Of A Chatbot As A Tool To Assist A Helpdesk Team." <i>International Conferences on Applied Computing 2022 and WWW/Internet 2022</i>.
+Recommended citation: Ribeiro, Diogo. (2022). "Design And Implementation Of A Chatbot As A Tool To Assist A Helpdesk Team." <i>19th International Conference on Applied Computing</i>.
