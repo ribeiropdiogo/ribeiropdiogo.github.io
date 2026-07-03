@@ -17,6 +17,8 @@ Education
 * M.S. in Informatics Engineering, University of Minho, 2022
 * Ph.D in Informatics, University of Minho, 2027 (expected)
 
+<br>
+
 Work Experience
 ======
 * 02/2024 - Current: Invited Assistant
@@ -37,6 +39,8 @@ Work Experience
 * 04/2021 - 09/2021: Research Assistant
   * HasLab INESC TEC
 
+<br>
+
 Hard-Skills
 ======
 * Distributed System
@@ -50,6 +54,8 @@ Hard-Skills
 * Scripting
 * Databases
 
+<br>
+
 Soft-Skills
 ======
 * Teamwork
@@ -58,17 +64,23 @@ Soft-Skills
 * Eager to Learn
 * Positive
 
+<br>
+
 Publications
 ======
   <ul>{% for post in site.publications reversed %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
-  
+
+<br> 
+
 Teaching
 ======
   <ul>{% for post in site.teaching reversed %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
+
+<br>
 
 Peer Review Activities
 ======
