@@ -9,6 +9,8 @@ redirect_from:
 
 {% include base_path %}
 
+<br>
+
 Education
 ======
 * B.S. in Informatics Engineering, University of Minho, 2020
@@ -67,3 +69,7 @@ Teaching
   <ul>{% for post in site.teaching reversed %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
+
+Peer Review Activities
+======
+* [Journal of Cybersecurity](https://academic.oup.com/cybersecurity)
