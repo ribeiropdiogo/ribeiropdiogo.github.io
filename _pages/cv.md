@@ -85,3 +85,4 @@ Teaching
 Peer Review Activities
 ======
 * [Journal of Cybersecurity](https://academic.oup.com/cybersecurity)
+* [Hawaii International Conference on System Sciences (HICSS)](https://hicss.hawaii.edu)
