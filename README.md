@@ -28,7 +28,7 @@ npm run preview    # serve the production build
 | Colors, type scale, spacing | `src/styles/global.css` |
 | Old-URL redirects | `redirects` in `astro.config.mjs` |
 
-The homepage "Recent" timeline, the CV's publication and teaching lists, and the RSS feed (`/feed.xml`) are generated from the content files, so adding a file updates all of them.
+The talks map, the homepage "Recent" timeline, the CV's publication and teaching lists, and the RSS feed (`/feed.xml`) are generated from the content files, so adding a file updates all of them.
 
 ## Add a publication
 
@@ -62,6 +62,7 @@ permalink: /talks/YYYY-MM-DD
 venue: "Event name"
 date: YYYY-MM-DD
 location: "City, Country"
+coordinates: [41.1579, -8.6291]  # [latitude, longitude], places the talk on the map
 slidesurl: '/files/slides.pdf'   # optional, put the file in public/files/
 ---
 

@@ -15,6 +15,6 @@ export default defineConfig({
     // Four teaching entries shared this permalink on the old site.
     '/teaching/2014-spring-teaching': '/teaching/',
     '/teaching/2026-spring-teaching': '/teaching/',
-    '/talkmap': '/talks/',
+    '/talkmap': '/talks/#map',
   },
 });
