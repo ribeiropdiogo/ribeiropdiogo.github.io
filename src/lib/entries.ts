@@ -50,7 +50,7 @@ export const isoDate = (d: Date) => d.toISOString().slice(0, 10);
 /** Bold my name inside an author/citation string (display only; text unchanged). */
 export function highlightMe(citation: string) {
   return citation.replace(
-    /(Ribeiro, Diogo(?: Pinto)?|Ribeiro, D\.|D\. Ribeiro)/g,
+    /(Ribeiro, Diogo(?: Pinto)?|Ribeiro, D\.(?: P\.)?|D\. Ribeiro)/g,
     '<strong>$1</strong>',
   );
 }
