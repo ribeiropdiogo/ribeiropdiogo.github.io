@@ -1,8 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { formatDay, getTalks, isoDate } from '../../lib/entries';
+import { formatDay, getPublications, getTalks, isoDate } from '../../lib/entries';
 
 const talks = await getTalks();
+const pubs = await getPublications();
+const paperFor = (title: string) => pubs.find((p) => p.data.title === title);
 ---
 <Base title="Talks" description="Talks and presentations by Diogo Ribeiro.">
   <h1>Talks and presentations</h1>
@@ -13,8 +15,11 @@ const talks = await getTalks();
         <time datetime={isoDate(t.data.date)}>{formatDay(t.data.date)}</time>
         <h2><a href={t.data.permalink + '/'}>{t.data.title}</a></h2>
         <p class="where">{t.data.venue}{t.data.location && <span class="loc">{t.data.location}</span>}</p>
-        {t.data.slidesurl && (
-          <ul class="talk-links"><li><a href={t.data.slidesurl}>Slides <span class="filetype">PDF</span></a></li></ul>
+        {(paperFor(t.data.title) || t.data.slidesurl) && (
+          <ul class="talk-links" aria-label="Links">
+            {paperFor(t.data.title) && <li><a href={paperFor(t.data.title)!.data.permalink + '/'}>Paper</a></li>}
+            {t.data.slidesurl && <li><a href={t.data.slidesurl}>Slides</a></li>}
+          </ul>
         )}
       </li>
     ))}
@@ -25,7 +30,7 @@ const talks = await getTalks();
   h1 { margin-bottom: var(--space-6); }
 
   .talks { list-style: none; padding: 0; margin: 0; }
-  .talks li { padding: var(--space-5) 0; border-top: 1px solid var(--rule); }
+  .talks > li { padding: var(--space-5) 0; border-top: 1px solid var(--rule); }
 
   time { display: block; color: var(--faint); font-size: var(--step--1); margin-bottom: var(--space-1); }
 
@@ -36,6 +41,8 @@ const talks = await getTalks();
   .where { margin: 0; color: var(--muted); font-size: var(--step--1); }
   .loc { display: block; color: var(--faint); }
 
-  .talk-links { display: flex; gap: var(--space-4); list-style: none; padding: 0; margin: var(--space-2) 0 0; font-size: var(--step--1); font-weight: 500; }
-  .filetype { color: var(--faint); font-weight: 400; }
+  /* Secondary links: quiet until hovered so the title stays the focus. */
+  .talk-links { display: flex; gap: var(--space-3); list-style: none; padding: 0; margin: var(--space-2) 0 0; font-size: var(--step--1); }
+  .talk-links a { color: var(--faint); text-decoration-color: var(--rule); }
+  .talk-links a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
 </style>
