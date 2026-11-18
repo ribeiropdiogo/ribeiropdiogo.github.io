@@ -1,0 +1,253 @@
+---
+import '../styles/global.css';
+import { SITE, LINKS, NAV } from '../site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article' | 'profile';
+}
+
+const { title, description = SITE.description, type = 'website' } = Astro.props;
+const pageTitle = title ? `${title} - ${SITE.name}` : SITE.name;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImage = new URL(SITE.avatar, SITE.url).href;
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => {
+  const h = href.replace(/\/$/, '') || '/';
+  return h === '/' ? path === '/' : path === h || path.startsWith(h + '/');
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary" />
+
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/images/favicon.ico" sizes="any" />
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon-180x180.png" />
+    <link rel="manifest" href="/images/manifest.json" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name}: publications and talks`} href="/feed.xml" />
+
+    <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={SITE.umamiId}></script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="shell">
+      <header class="rail">
+        <a class="identity" href="/" aria-label={`${SITE.name}, home`}>
+          <img class="avatar" src={SITE.avatar} alt="" width="88" height="88" />
+          <span class="name">{SITE.name}</span>
+        </a>
+        <ul class="roles">
+          {SITE.roles.map((r) => (
+            <li>{r.title}<span class="org">{r.org}</span></li>
+          ))}
+        </ul>
+
+        <nav class="nav" aria-label="Main">
+          <ul>
+            {NAV.map((item) => (
+              <li>
+                <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div class="contact">
+          <a class="email" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          <ul class="links" aria-label="Profiles">
+            {LINKS.map((l) => (
+              <li><a href={l.href} rel="me noopener" target="_blank">{l.label}</a></li>
+            ))}
+          </ul>
+          <p class="location">{SITE.location}</p>
+        </div>
+      </header>
+
+      <main id="main" tabindex="-1">
+        <slot />
+      </main>
+
+      <footer class="footer">
+        <p>© {new Date().getFullYear()} {SITE.name}</p>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .shell {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--space-5) var(--space-4) var(--space-6);
+  }
+
+  main {
+    min-width: 0;
+    max-width: var(--measure);
+  }
+  main:focus { outline: none; }
+
+  /* ---------- Rail ---------- */
+  .rail {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-4);
+    row-gap: var(--space-3);
+    align-items: center;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .identity {
+    display: contents;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .avatar {
+    grid-row: span 2;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--rule);
+  }
+
+  .name {
+    align-self: end;
+    font-size: var(--step-1);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  .roles {
+    align-self: start;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .roles .org::before { content: ', '; }
+
+  .nav { grid-column: 1 / -1; }
+  .nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .nav a {
+    display: inline-block;
+    padding: var(--space-1) 0;
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav a:hover { color: var(--ink); }
+  .nav a[aria-current='page'] {
+    color: var(--ink);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  .contact {
+    grid-column: 1 / -1;
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+  .email { overflow-wrap: anywhere; }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 0;
+  }
+  .links a { color: var(--muted); }
+  .links a:hover { color: var(--ink); }
+  .location { display: none; }
+
+  .footer {
+    font-size: var(--step--1);
+    color: var(--faint);
+  }
+  .footer p { margin: 0; }
+
+  /* ---------- Desktop: sticky rail ---------- */
+  @media (min-width: 56rem) {
+    .shell {
+      grid-template-columns: var(--rail) minmax(0, 1fr);
+      column-gap: var(--space-8);
+      padding: var(--space-8) var(--space-6);
+    }
+
+    .rail {
+      position: sticky;
+      top: var(--space-8);
+      align-self: start;
+      display: block;
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .identity { display: block; }
+    .avatar {
+      display: block;
+      width: 5.5rem;
+      height: 5.5rem;
+      margin-bottom: var(--space-4);
+    }
+    .name {
+      display: block;
+      font-size: var(--step-2);
+      margin-bottom: var(--space-2);
+    }
+    .roles .org { display: block; color: var(--faint); }
+    .roles .org::before { content: none; }
+    .roles li + li { margin-top: var(--space-2); }
+
+    .nav { margin: var(--space-6) 0; }
+    .nav ul { flex-direction: column; gap: 0; }
+    .nav a {
+      padding: var(--space-1) 0 var(--space-1) var(--space-3);
+      border-left: 2px solid var(--rule);
+    }
+    .nav a[aria-current='page'] {
+      box-shadow: none;
+      border-left-color: var(--accent);
+    }
+
+    .links { flex-direction: column; gap: var(--space-1); margin-top: var(--space-3); }
+    .location { display: block; margin: var(--space-3) 0 0; color: var(--faint); }
+
+    .footer { grid-column: 2; }
+  }
+</style>
