@@ -10,7 +10,7 @@ export const education = [
 export const work = [
   { period: '02/2024 - Current', role: 'Invited Assistant', org: 'University of Minho' },
   { period: '10/2022 - Current', role: 'Research Assistant', org: 'HasLab INESC TEC' },
-  { period: '10/2021 - 07/2022', role: 'External Research Assistant', org: 'HasLab INESC TEC' },
+  { period: '07/2022 - 10/2022', role: 'External Research Assistant', org: 'HasLab INESC TEC' },
   { period: '06/2022 - 07/2022', role: 'Junior Software Engineer', org: 'VILT' },
   { period: '09/2021 - 06/2022', role: 'Engineering Trainee', org: 'VILT' },
   { period: '04/2021 - 09/2021', role: 'Research Assistant', org: 'HasLab INESC TEC' },
