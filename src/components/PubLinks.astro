@@ -8,7 +8,8 @@ interface Props {
   showDetails?: boolean;
 }
 const { pub, talk, showDetails = false } = Astro.props;
-const { paperurl, bibtexurl, slidesurl, category } = pub.data;
+const { paperurl, bibtexurl, category } = pub.data;
+const slidesurl = pub.data.slidesurl ?? talk?.data.slidesurl;
 const paperLabel = category === 'reports' ? 'Report' : 'Paper';
 ---
 <ul class="pub-links">

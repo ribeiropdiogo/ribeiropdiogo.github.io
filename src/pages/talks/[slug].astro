@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 }
 
 const { talk } = Astro.props as { talk: Talk };
-const { title, venue, location, date, type } = talk.data;
+const { title, venue, location, date, type, slidesurl } = talk.data;
 const { Content } = await render(talk);
 const paper = (await getPublications()).find((p) => p.data.title === title);
 ---
@@ -23,6 +23,7 @@ const paper = (await getPublications()).find((p) => p.data.title === title);
       <div><dt>Venue</dt><dd>{venue}</dd></div>
       {location && <div><dt>Where</dt><dd>{location}</dd></div>}
       <div><dt>Date</dt><dd><time datetime={isoDate(date)}>{formatDay(date)}</time></dd></div>
+      {slidesurl && <div><dt>Slides</dt><dd><a href={slidesurl}>Download slides (PDF)</a></dd></div>}
       {paper && <div><dt>Paper</dt><dd><a href={paper.data.permalink + '/'}>Publication page</a></dd></div>}
     </dl>
 

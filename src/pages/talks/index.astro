@@ -13,6 +13,9 @@ const talks = await getTalks();
         <time datetime={isoDate(t.data.date)}>{formatDay(t.data.date)}</time>
         <h2><a href={t.data.permalink + '/'}>{t.data.title}</a></h2>
         <p class="where">{t.data.venue}{t.data.location && <span class="loc">{t.data.location}</span>}</p>
+        {t.data.slidesurl && (
+          <ul class="talk-links"><li><a href={t.data.slidesurl}>Slides <span class="filetype">PDF</span></a></li></ul>
+        )}
       </li>
     ))}
   </ol>
@@ -32,4 +35,7 @@ const talks = await getTalks();
 
   .where { margin: 0; color: var(--muted); font-size: var(--step--1); }
   .loc { display: block; color: var(--faint); }
+
+  .talk-links { display: flex; gap: var(--space-4); list-style: none; padding: 0; margin: var(--space-2) 0 0; font-size: var(--step--1); font-weight: 500; }
+  .filetype { color: var(--faint); font-weight: 400; }
 </style>
