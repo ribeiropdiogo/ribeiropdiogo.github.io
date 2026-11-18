@@ -14,9 +14,11 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(SITE.avatar, SITE.url).href;
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+// Detail pages live under a singular prefix (/publication/x), so map them to their section.
+const section = path.startsWith('/publication/') ? '/publications' : path;
 const isCurrent = (href: string) => {
   const h = href.replace(/\/$/, '') || '/';
-  return h === '/' ? path === '/' : path === h || path.startsWith(h + '/');
+  return h === '/' ? path === '/' : section === h || section.startsWith(h + '/');
 };
 ---
 <!doctype html>
@@ -210,8 +212,6 @@ const isCurrent = (href: string) => {
     }
 
     .rail {
-      position: sticky;
-      top: var(--space-8);
       align-self: start;
       display: block;
       padding-bottom: 0;
@@ -245,9 +245,17 @@ const isCurrent = (href: string) => {
       border-left-color: var(--accent);
     }
 
-    .links { flex-direction: column; gap: var(--space-1); margin-top: var(--space-3); }
+    .links { gap: var(--space-1) var(--space-3); margin-top: var(--space-3); }
     .location { display: block; margin: var(--space-3) 0 0; color: var(--faint); }
 
     .footer { grid-column: 2; }
+  }
+
+  /* Only pin the rail when the window is tall enough to show all of it. */
+  @media (min-width: 56rem) and (min-height: 44rem) {
+    .rail {
+      position: sticky;
+      top: var(--space-8);
+    }
   }
 </style>
