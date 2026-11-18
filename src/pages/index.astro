@@ -3,42 +3,13 @@ import Base from '../layouts/Base.astro';
 import Timeline from '../components/Timeline.astro';
 import TruthDiagram from '../components/TruthDiagram.astro';
 import { Content as About } from '../content/pages/about.md';
-import { getPublications, getTalks, getTimeline } from '../lib/entries';
-import { threads } from '../data/research';
+import { getTimeline } from '../lib/entries';
 import { getImage } from 'astro:assets';
 import avatar from '../assets/avatar.jpg';
 import { SITE, LINKS } from '../site';
 
 const photo = await getImage({ src: avatar, width: 512, height: 512, format: 'jpg' });
 const recent = (await getTimeline()).slice(0, 6);
-
-// Resolve each research thread's permalinks to the actual papers and talks.
-const [pubs, talks] = await Promise.all([getPublications(), getTalks()]);
-const research = threads.map((t) => ({
-  ...t,
-  items: t.items.map((permalink) => {
-    const pub = pubs.find((p) => p.data.permalink === permalink);
-    if (pub) {
-      return {
-        kind: pub.data.category === 'reports' ? 'Report' : 'Paper',
-        year: pub.data.date.getUTCFullYear(),
-        title: pub.data.title,
-        href: permalink + '/',
-      };
-    }
-    const talk = talks.find((x) => x.data.permalink === permalink);
-    if (talk) {
-      return { kind: 'Talk', year: talk.data.date.getUTCFullYear(), title: talk.data.title, href: permalink + '/' };
-    }
-    throw new Error(`Research thread "${t.title}" links to ${permalink}, which is not a publication or talk.`);
-  }).reduce<{ kind: string; year: number; title: string; href: string }[]>((rows, item) => {
-    // A paper and the talk presenting it share a title: show them as one row.
-    const twin = rows.find((r) => r.title === item.title);
-    if (twin) twin.kind = `${twin.kind}, ${item.kind.toLowerCase()}`;
-    else rows.push(item);
-    return rows;
-  }, []),
-}));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -65,6 +36,10 @@ const jsonLd = {
       that learn how reliable each source is, so conflicting information can be resolved in favour of the sources
       that have earned trust.
     </p>
+    <p class="lede">
+      I also work on <strong>information security</strong>, from large-scale assessments of the security of online
+      public services to teaching cryptography and security at the University of Minho.
+    </p>
     <ul class="actions">
       <li><a class="primary" href="/publications/">Read my publications</a></li>
       <li><a href="/cv/">View CV</a></li>
@@ -75,26 +50,6 @@ const jsonLd = {
   <div class="diagram">
     <TruthDiagram />
   </div>
-
-  <section class="research" aria-labelledby="research-title">
-    <h2 id="research-title">Research</h2>
-    <div class="threads">
-      {research.map((t) => (
-        <article class="thread">
-          <h3>{t.title}</h3>
-          <p>{t.summary}</p>
-          <ul>
-            {t.items.map((item) => (
-              <li>
-                <span class="meta">{item.kind} <span class="year">{item.year}</span></span>
-                <a href={item.href}>{item.title}</a>
-              </li>
-            ))}
-          </ul>
-        </article>
-      ))}
-    </div>
-  </section>
 
   <section aria-labelledby="recent-title">
     <div class="section-head">
@@ -127,8 +82,9 @@ const jsonLd = {
     line-height: 1.55;
     color: var(--muted);
     max-width: 60ch;
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-4);
   }
+  .lede:last-of-type { margin-bottom: var(--space-5); }
   .lede strong { color: var(--ink); font-weight: 600; }
 
   .actions {
@@ -161,41 +117,6 @@ const jsonLd = {
 
   section { margin-top: var(--space-8); }
 
-  /* ---------- Research threads ---------- */
-  .threads { border-top: 1px solid var(--rule); }
-  .thread {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-2);
-    padding: var(--space-5) 0;
-    border-bottom: 1px solid var(--rule);
-  }
-  .thread h3 { margin: 0; font-size: var(--step-1); }
-  .thread p { margin: 0; color: var(--muted); }
-  .thread ul {
-    list-style: none;
-    padding: 0;
-    margin: var(--space-2) 0 0;
-    display: grid;
-    gap: var(--space-2);
-  }
-  .thread li {
-    display: grid;
-    grid-template-columns: 6rem 1fr;
-    gap: var(--space-3);
-    font-size: var(--step--1);
-    line-height: 1.45;
-  }
-  .thread .meta { color: var(--faint); }
-  .thread .year { font-variant-numeric: tabular-nums; }
-  .thread li a { color: var(--ink); text-decoration-color: var(--rule); }
-  .thread li a:hover { text-decoration-color: var(--accent); }
-
-  @media (min-width: 64rem) {
-    .thread { grid-template-columns: 13rem 1fr; column-gap: var(--space-6); }
-    .thread h3 { grid-row: span 2; padding-top: 0.1rem; font-size: var(--step-0); }
-  }
-
   /* ---------- Recent ---------- */
   .section-head {
     display: flex;
@@ -221,6 +142,5 @@ const jsonLd = {
 
   @media (max-width: 30rem) {
     .diagram { padding: var(--space-3); }
-    .thread li { grid-template-columns: 1fr; gap: 0; }
   }
 </style>
