@@ -1,4 +1,107 @@
 ---
 import Base from '../layouts/Base.astro';
+import Timeline from '../components/Timeline.astro';
+import { Content as About } from '../content/pages/about.md';
+import { getTimeline } from '../lib/entries';
+import { SITE, LINKS } from '../site';
+
+// Taken from the "Hard-Skills" list on the CV.
+const interests = ['Truth Discovery', 'Reputation Systems', 'Data Fusion', 'Information Security', 'Distributed System'];
+
+const recent = (await getTimeline()).slice(0, 6);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  url: SITE.url,
+  image: new URL(SITE.avatar, SITE.url).href,
+  email: `mailto:${SITE.email}`,
+  jobTitle: SITE.roles.map((r) => r.title),
+  affiliation: [...new Set(SITE.roles.map((r) => r.org))].map((name) => ({ '@type': 'Organization', name })),
+  address: { '@type': 'PostalAddress', addressLocality: 'Braga', addressCountry: 'PT' },
+  sameAs: LINKS.map((l) => l.href),
+};
 ---
-<Base><h1>About</h1><p>Placeholder</p></Base>
+<Base type="profile">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <section class="intro" aria-labelledby="about-title">
+    <h1 id="about-title">About me</h1>
+    <div class="prose">
+      <About />
+    </div>
+  </section>
+
+  <section class="interests" aria-labelledby="interests-title">
+    <h2 id="interests-title">Research interests</h2>
+    <ul>
+      {interests.map((i) => <li>{i}</li>)}
+    </ul>
+  </section>
+
+  <section aria-labelledby="recent-title">
+    <div class="section-head">
+      <h2 id="recent-title">Recent</h2>
+      <a href="/cv/">Full history in the CV</a>
+    </div>
+    <Timeline items={recent} label="Recent papers, talks and teaching" />
+  </section>
+</Base>
+
+<style>
+  section + section { margin-top: var(--space-7); }
+
+  .intro h1 { margin-bottom: var(--space-5); }
+
+  /* First paragraph of the bio reads as the lead. */
+  .prose :global(p:first-of-type) {
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .prose :global(p) { color: var(--muted); }
+  .prose :global(h2) {
+    font-size: var(--step-1);
+    margin-top: var(--space-6);
+    color: var(--ink);
+  }
+
+  .interests ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .interests li {
+    padding: 0.2rem 0.7rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: var(--step--1);
+  }
+  .interests li:nth-child(-n + 2) {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+  .section-head h2 { margin: 0; }
+  .section-head a { font-size: var(--step--1); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .intro { animation: rise 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+    }
+  }
+</style>

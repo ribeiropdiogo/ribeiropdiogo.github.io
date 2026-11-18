@@ -1,11 +1,5 @@
 ---
-permalink: /
-title: "About Me"
-excerpt: "About me"
-author_profile: true
-redirect_from: 
-  - /about/
-  - /about.html
+title: "About me"
 ---
 
 My name is Diogo, and I am a Research Assistant at the High-Assurance Software Laboratory at the University of Minho’s Gualtar Campus. In addition to my research work, I am also an Invited Assistant at the University of Minho, where I teach courses related to cryptography, security, and informatics laboratories. My current research focuses on truth discovery and reputation systems, areas that I find both challenging and highly relevant in today's digital landscape.
