@@ -29,9 +29,9 @@ const jsonLd = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
   <header class="hero">
-    <h1>When sources disagree, which one should you trust?</h1>
+    <h1>Hi, I'm Diogo.</h1>
     <p class="lede">
-      I'm Diogo Ribeiro, a PhD student in Informatics at the University of Minho and a Research Assistant at HasLab,
+      I'm a PhD student in Informatics at the University of Minho and a Research Assistant at HasLab,
       INESC TEC, in Braga. I work on <strong>truth discovery</strong> and <strong>reputation systems</strong>: methods
       that learn how reliable each source is, so conflicting information can be resolved in favour of the sources
       that have earned trust.
@@ -40,11 +40,6 @@ const jsonLd = {
       I also work on <strong>information security</strong>, from large-scale assessments of the security of online
       public services to teaching cryptography and security at the University of Minho.
     </p>
-    <ul class="actions">
-      <li><a class="primary" href="/publications/">Read my publications</a></li>
-      <li><a href="/cv/">View CV</a></li>
-      <li><a href={`mailto:${SITE.email}`}>Email me</a></li>
-    </ul>
   </header>
 
   <div class="diagram">
@@ -84,28 +79,8 @@ const jsonLd = {
     max-width: 60ch;
     margin-bottom: var(--space-4);
   }
-  .lede:last-of-type { margin-bottom: var(--space-5); }
+  .lede:last-of-type { margin-bottom: 0; }
   .lede strong { color: var(--ink); font-weight: 600; }
-
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3) var(--space-5);
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-weight: 500;
-  }
-  .actions .primary {
-    display: inline-block;
-    padding: 0.55rem 1.05rem;
-    border-radius: var(--radius);
-    background: var(--accent);
-    color: var(--paper);
-    text-decoration: none;
-  }
-  .actions .primary:hover { background: var(--accent-ink); color: var(--paper); }
 
   .diagram {
     margin: var(--space-7) 0 0;
