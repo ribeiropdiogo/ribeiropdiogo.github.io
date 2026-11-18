@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import TalkMap from '../../components/TalkMap.astro';
 import { formatDay, getPublications, getTalks, isoDate } from '../../lib/entries';
 
 const talks = await getTalks();
@@ -9,9 +10,11 @@ const paperFor = (title: string) => pubs.find((p) => p.data.title === title);
 <Base title="Talks" description="Talks and presentations by Diogo Ribeiro.">
   <h1>Talks and presentations</h1>
 
+  <TalkMap talks={talks} />
+
   <ol class="talks">
     {talks.map((t) => (
-      <li>
+      <li id={`talk-${t.id}`}>
         <time datetime={isoDate(t.data.date)}>{formatDay(t.data.date)}</time>
         <h2><a href={t.data.permalink + '/'}>{t.data.title}</a></h2>
         <p class="where">{t.data.venue}{t.data.location && <span class="loc">{t.data.location}</span>}</p>

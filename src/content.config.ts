@@ -32,7 +32,9 @@ const talks = defineCollection({
     permalink: z.string().regex(/^\/talks\/[\w-]+$/),
     venue: z.string(),
     date: z.coerce.date(),
-    location: z.string().optional(),
+    location: z.string(),
+    // [latitude, longitude] of the location, used by the talks map.
+    coordinates: z.tuple([z.number().min(-90).max(90), z.number().min(-180).max(180)]),
     slidesurl: optionalUrl,
   }),
 });
