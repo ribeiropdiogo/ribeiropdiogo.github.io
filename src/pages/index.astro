@@ -1,18 +1,44 @@
 ---
 import Base from '../layouts/Base.astro';
 import Timeline from '../components/Timeline.astro';
+import TruthDiagram from '../components/TruthDiagram.astro';
 import { Content as About } from '../content/pages/about.md';
-import { getTimeline } from '../lib/entries';
+import { getPublications, getTalks, getTimeline } from '../lib/entries';
+import { threads } from '../data/research';
 import { getImage } from 'astro:assets';
 import avatar from '../assets/avatar.jpg';
 import { SITE, LINKS } from '../site';
 
 const photo = await getImage({ src: avatar, width: 512, height: 512, format: 'jpg' });
-
-// Taken from the "Hard-Skills" list on the CV.
-const interests = ['Truth Discovery', 'Reputation Systems', 'Data Fusion', 'Information Security', 'Distributed Systems'];
-
 const recent = (await getTimeline()).slice(0, 6);
+
+// Resolve each research thread's permalinks to the actual papers and talks.
+const [pubs, talks] = await Promise.all([getPublications(), getTalks()]);
+const research = threads.map((t) => ({
+  ...t,
+  items: t.items.map((permalink) => {
+    const pub = pubs.find((p) => p.data.permalink === permalink);
+    if (pub) {
+      return {
+        kind: pub.data.category === 'reports' ? 'Report' : 'Paper',
+        year: pub.data.date.getUTCFullYear(),
+        title: pub.data.title,
+        href: permalink + '/',
+      };
+    }
+    const talk = talks.find((x) => x.data.permalink === permalink);
+    if (talk) {
+      return { kind: 'Talk', year: talk.data.date.getUTCFullYear(), title: talk.data.title, href: permalink + '/' };
+    }
+    throw new Error(`Research thread "${t.title}" links to ${permalink}, which is not a publication or talk.`);
+  }).reduce<{ kind: string; year: number; title: string; href: string }[]>((rows, item) => {
+    // A paper and the talk presenting it share a title: show them as one row.
+    const twin = rows.find((r) => r.title === item.title);
+    if (twin) twin.kind = `${twin.kind}, ${item.kind.toLowerCase()}`;
+    else rows.push(item);
+    return rows;
+  }, []),
+}));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -24,24 +50,50 @@ const jsonLd = {
   jobTitle: SITE.roles.map((r) => r.title),
   affiliation: [...new Set(SITE.roles.map((r) => r.org))].map((name) => ({ '@type': 'Organization', name })),
   address: { '@type': 'PostalAddress', addressLocality: 'Braga', addressCountry: 'PT' },
+  knowsAbout: ['Truth discovery', 'Reputation systems', 'Data fusion', 'Information security'],
   sameAs: LINKS.map((l) => l.href),
 };
 ---
 <Base type="profile">
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-  <section class="intro" aria-labelledby="about-title">
-    <h1 id="about-title">About me</h1>
-    <div class="prose">
-      <About />
-    </div>
-  </section>
-
-  <section class="interests" aria-labelledby="interests-title">
-    <h2 id="interests-title">Research interests</h2>
-    <ul>
-      {interests.map((i) => <li>{i}</li>)}
+  <header class="hero">
+    <h1>When sources disagree, which one should you trust?</h1>
+    <p class="lede">
+      I'm Diogo Ribeiro, a PhD student in Informatics at the University of Minho and a Research Assistant at HasLab,
+      INESC TEC, in Braga. I work on <strong>truth discovery</strong> and <strong>reputation systems</strong>: methods
+      that learn how reliable each source is, so conflicting information can be resolved in favour of the sources
+      that have earned trust.
+    </p>
+    <ul class="actions">
+      <li><a class="primary" href="/publications/">Read my publications</a></li>
+      <li><a href="/cv/">View CV</a></li>
+      <li><a href={`mailto:${SITE.email}`}>Email me</a></li>
     </ul>
+  </header>
+
+  <div class="diagram">
+    <TruthDiagram />
+  </div>
+
+  <section class="research" aria-labelledby="research-title">
+    <h2 id="research-title">Research</h2>
+    <div class="threads">
+      {research.map((t) => (
+        <article class="thread">
+          <h3>{t.title}</h3>
+          <p>{t.summary}</p>
+          <ul>
+            {t.items.map((item) => (
+              <li>
+                <span class="meta">{item.kind} <span class="year">{item.year}</span></span>
+                <a href={item.href}>{item.title}</a>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
   </section>
 
   <section aria-labelledby="recent-title">
@@ -51,46 +103,100 @@ const jsonLd = {
     </div>
     <Timeline items={recent} label="Recent papers, talks and teaching" />
   </section>
+
+  <section class="about" aria-labelledby="about-title">
+    <h2 id="about-title">About me</h2>
+    <div class="prose">
+      <About />
+    </div>
+  </section>
 </Base>
 
 <style>
-  section + section { margin-top: var(--space-7); }
-
-  .intro h1 { margin-bottom: var(--space-5); }
-
-  /* First paragraph of the bio reads as the lead. */
-  .prose :global(p:first-of-type) {
-    font-size: var(--step-1);
-    line-height: 1.5;
-    color: var(--ink);
-  }
-  .prose :global(p) { color: var(--muted); }
-  .prose :global(h2) {
-    font-size: var(--step-1);
-    margin-top: var(--space-6);
-    color: var(--ink);
+  /* ---------- Hero ---------- */
+  .hero h1 {
+    font-size: clamp(2.1rem, 1.4rem + 2.6vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    max-width: 17ch;
+    margin-bottom: var(--space-5);
   }
 
-  .interests ul {
+  .lede {
+    font-size: var(--step-1);
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 60ch;
+    margin-bottom: var(--space-5);
+  }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    align-items: center;
+    gap: var(--space-3) var(--space-5);
     list-style: none;
     padding: 0;
     margin: 0;
+    font-weight: 500;
   }
-  .interests li {
-    padding: 0.2rem 0.7rem;
+  .actions .primary {
+    display: inline-block;
+    padding: 0.55rem 1.05rem;
+    border-radius: var(--radius);
+    background: var(--accent);
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .actions .primary:hover { background: var(--accent-ink); color: var(--paper); }
+
+  .diagram {
+    margin: var(--space-7) 0 0;
+    padding: var(--space-5);
     border: 1px solid var(--rule);
-    border-radius: 999px;
-    background: var(--surface);
-    font-size: var(--step--1);
-  }
-  .interests li:nth-child(-n + 2) {
-    border-color: var(--accent);
-    color: var(--accent-ink);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--surface) 60%, var(--paper));
   }
 
+  section { margin-top: var(--space-8); }
+
+  /* ---------- Research threads ---------- */
+  .threads { border-top: 1px solid var(--rule); }
+  .thread {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .thread h3 { margin: 0; font-size: var(--step-1); }
+  .thread p { margin: 0; color: var(--muted); }
+  .thread ul {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+  .thread li {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: var(--space-3);
+    font-size: var(--step--1);
+    line-height: 1.45;
+  }
+  .thread .meta { color: var(--faint); }
+  .thread .year { font-variant-numeric: tabular-nums; }
+  .thread li a { color: var(--ink); text-decoration-color: var(--rule); }
+  .thread li a:hover { text-decoration-color: var(--accent); }
+
+  @media (min-width: 64rem) {
+    .thread { grid-template-columns: 13rem 1fr; column-gap: var(--space-6); }
+    .thread h3 { grid-row: span 2; padding-top: 0.1rem; font-size: var(--step-0); }
+  }
+
+  /* ---------- Recent ---------- */
   .section-head {
     display: flex;
     flex-wrap: wrap;
@@ -102,10 +208,19 @@ const jsonLd = {
   .section-head h2 { margin: 0; }
   .section-head a { font-size: var(--step--1); }
 
+  /* ---------- About ---------- */
+  .about .prose :global(p) { color: var(--muted); }
+  .about .prose :global(h2) { font-size: var(--step-1); margin-top: var(--space-6); }
+
   @media (prefers-reduced-motion: no-preference) {
-    .intro { animation: rise 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .hero { animation: rise 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
     @keyframes rise {
       from { opacity: 0; transform: translateY(6px); }
     }
+  }
+
+  @media (max-width: 30rem) {
+    .diagram { padding: var(--space-3); }
+    .thread li { grid-template-columns: 1fr; gap: 0; }
   }
 </style>
