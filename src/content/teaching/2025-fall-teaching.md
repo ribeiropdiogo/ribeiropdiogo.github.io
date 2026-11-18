@@ -1,11 +1,10 @@
 ---
-title: "1st Semester 24/25"
+title: "1st Semester 25/26"
 collection: teaching
 type: "Undergraduate Course"
-permalink: /teaching/2014-spring-teaching
 venue: "University of Minho, Department of Informatics"
-date: 2024-09-01
-location: "Braga, Country"
+date: 2025-09-01
+location: "Braga, Portugal"
 ---
 
 Informatics Laboratories III
