@@ -1,0 +1,33 @@
+---
+import type { Publication, Talk } from '../lib/entries';
+import { localPath } from '../lib/bibtex';
+
+interface Props {
+  pub: Publication;
+  talk?: Talk;
+  showDetails?: boolean;
+}
+const { pub, talk, showDetails = false } = Astro.props;
+const { paperurl, bibtexurl, slidesurl, category } = pub.data;
+const paperLabel = category === 'reports' ? 'Report' : 'Paper';
+---
+<ul class="pub-links">
+  {showDetails && <li><a href={pub.data.permalink + '/'}>Details and citation</a></li>}
+  {paperurl && <li><a href={paperurl} rel="noopener">{paperLabel}</a></li>}
+  {bibtexurl && <li><a href={localPath(bibtexurl)} download>BibTeX</a></li>}
+  {slidesurl && <li><a href={slidesurl}>Slides</a></li>}
+  {talk && <li><a href={talk.data.permalink + '/'}>Talk</a></li>}
+</ul>
+
+<style>
+  .pub-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    list-style: none;
+    padding: 0;
+    margin: var(--space-2) 0 0;
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+</style>
