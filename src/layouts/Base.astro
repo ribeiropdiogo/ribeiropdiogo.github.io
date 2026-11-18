@@ -13,6 +13,7 @@ interface Props {
 const { title, description = SITE.description, type = 'website' } = Astro.props;
 const pageTitle = title ? `${title} - ${SITE.name}` : SITE.name;
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const isNotFound = Astro.url.pathname.replace(/\/$/, '') === '/404';
 const og = await getImage({ src: avatar, width: 512, height: 512, format: 'jpg' });
 const ogImage = new URL(og.src, SITE.url).href;
 
@@ -39,7 +40,7 @@ const isCurrent = (href: string) => {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {isNotFound ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={title ?? SITE.name} />
