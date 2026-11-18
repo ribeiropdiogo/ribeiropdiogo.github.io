@@ -1,3 +1,8 @@
 ---
+import { getCollection } from 'astro:content';
+const pubs = await getCollection('publications');
+const talks = await getCollection('talks');
+const teaching = await getCollection('teaching');
 ---
-<html lang="en"><head><meta charset="utf-8" /><title>Diogo Ribeiro</title></head><body><p>Scaffold</p></body></html>
+<html lang="en"><head><meta charset="utf-8" /><title>Diogo Ribeiro</title></head>
+<body><p>{pubs.length} publications, {talks.length} talks, {teaching.length} courses</p></body></html>
