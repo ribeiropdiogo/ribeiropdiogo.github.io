@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import { formatDay, getTalks, isoDate } from '../../lib/entries';
+
+const talks = await getTalks();
+---
+<Base title="Talks" description="Talks and presentations by Diogo Ribeiro.">
+  <h1>Talks and presentations</h1>
+
+  <ol class="talks">
+    {talks.map((t) => (
+      <li>
+        <time datetime={isoDate(t.data.date)}>{formatDay(t.data.date)}</time>
+        <h2><a href={t.data.permalink + '/'}>{t.data.title}</a></h2>
+        <p class="where">{t.data.venue}{t.data.location && <span class="loc">{t.data.location}</span>}</p>
+      </li>
+    ))}
+  </ol>
+</Base>
+
+<style>
+  h1 { margin-bottom: var(--space-6); }
+
+  .talks { list-style: none; padding: 0; margin: 0; }
+  .talks li { padding: var(--space-5) 0; border-top: 1px solid var(--rule); }
+
+  time { display: block; color: var(--faint); font-size: var(--step--1); margin-bottom: var(--space-1); }
+
+  h2 { font-size: var(--step-1); margin: 0 0 var(--space-2); }
+  h2 a { color: var(--ink); text-decoration: none; }
+  h2 a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
+
+  .where { margin: 0; color: var(--muted); font-size: var(--step--1); }
+  .loc { display: block; color: var(--faint); }
+</style>

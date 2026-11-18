@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import CopyButton from '../../components/CopyButton.astro';
+import PubLinks from '../../components/PubLinks.astro';
+import { CATEGORY_LABELS, formatDay, getPublications, getTalks, highlightMe, isoDate, slugFromPermalink, type Publication } from '../../lib/entries';
+import { readBibtex } from '../../lib/bibtex';
+
+export async function getStaticPaths() {
+  const pubs = await getPublications();
+  return pubs.map((pub) => ({ params: { slug: slugFromPermalink(pub.data.permalink) }, props: { pub } }));
+}
+
+const { pub } = Astro.props as { pub: Publication };
+const { title, venue, date, citation, category, bibtexurl } = pub.data;
+const bibtex = readBibtex(bibtexurl);
+const talk = (await getTalks()).find((t) => t.data.title === title);
+const kind = CATEGORY_LABELS[category].replace(/s$/, '');
+---
+<Base title={title} description={`${title}. ${venue}, ${date.getUTCFullYear()}.`} type="article">
+  <p class="back"><a href="/publications/">All publications</a></p>
+
+  <article>
+    <h1>{title}</h1>
+    <dl class="facts">
+      <div><dt>Type</dt><dd>{kind}</dd></div>
+      <div><dt>Venue</dt><dd>{venue}</dd></div>
+      <div><dt>Date</dt><dd><time datetime={isoDate(date)}>{formatDay(date)}</time></dd></div>
+    </dl>
+
+    <PubLinks pub={pub} talk={talk} />
+
+    <section aria-labelledby="cite-title">
+      <div class="block-head">
+        <h2 id="cite-title">Citation</h2>
+        <CopyButton target="citation" label="Copy citation" />
+      </div>
+      <p id="citation" class="citation" set:html={highlightMe(citation)} />
+    </section>
+
+    {bibtex && (
+      <section aria-labelledby="bib-title">
+        <div class="block-head">
+          <h2 id="bib-title">BibTeX</h2>
+          <CopyButton target="bibtex" label="Copy BibTeX" />
+        </div>
+        <pre id="bibtex" tabindex="0"><code>{bibtex}</code></pre>
+      </section>
+    )}
+  </article>
+</Base>
+
+<style>
+  .back { font-size: var(--step--1); margin-bottom: var(--space-5); }
+
+  h1 { font-size: var(--step-3); }
+
+  .facts {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
+  }
+  .facts div {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: var(--space-4);
+  }
+  dt { color: var(--faint); font-size: var(--step--1); padding-top: 0.15rem; }
+  dd { margin: 0; }
+
+  section { margin-top: var(--space-7); }
+
+  .block-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+  .block-head h2 { margin: 0; font-size: var(--step-1); }
+
+  .citation {
+    padding: var(--space-4);
+    border-left: 2px solid var(--accent);
+    background: var(--surface);
+    color: var(--muted);
+  }
+  .citation :global(strong) { color: var(--ink); font-weight: 600; }
+
+  pre {
+    margin: 0;
+    padding: var(--space-4);
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    font-size: var(--step--1);
+    line-height: 1.55;
+  }
+  pre code { font-size: inherit; }
+</style>

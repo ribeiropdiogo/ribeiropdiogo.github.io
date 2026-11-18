@@ -1,0 +1,105 @@
+---
+import { formatMonth, isoDate, type TimelineItem } from '../lib/entries';
+
+interface Props {
+  items: TimelineItem[];
+  label: string;
+}
+const { items, label } = Astro.props;
+---
+<ol class="timeline" aria-label={label}>
+  {items.map((item) => (
+    <li class="item" data-kind={item.kind.toLowerCase()}>
+      <time datetime={isoDate(item.date)}>{formatMonth(item.date)}</time>
+      <div class="body">
+        <span class="kind">{item.kind}</span>
+        <p class="title">
+          {item.href ? <a href={item.href}>{item.title}</a> : item.title}
+        </p>
+        <p class="meta">{item.meta}</p>
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .timeline {
+    --date-col: 5.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+  }
+
+  /* The rule: one continuous teal line linking every point. */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    left: calc(var(--date-col) + 0.3rem);
+    width: 1px;
+    background: linear-gradient(var(--accent), var(--rule));
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: var(--date-col) 1fr;
+    column-gap: var(--space-5);
+    position: relative;
+    padding-bottom: var(--space-5);
+  }
+  .item:last-child { padding-bottom: 0; }
+
+  /* Point on the line */
+  .item::before {
+    content: '';
+    position: absolute;
+    left: var(--date-col);
+    top: 0.45rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--accent);
+  }
+  .item[data-kind='paper']::before { background: var(--accent); }
+
+  time {
+    padding-top: 0.05rem;
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    font-size: var(--step--1);
+  }
+
+  .body { padding-left: var(--space-2); min-width: 0; }
+
+  .kind {
+    display: block;
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--accent-ink);
+    line-height: 1.4;
+  }
+
+  .title {
+    margin: 0.1rem 0 0.15rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .title a { color: var(--ink); text-decoration-color: var(--rule); }
+  .title a:hover { text-decoration-color: var(--accent); }
+
+  .meta {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 30rem) {
+    .timeline { --date-col: 4.6rem; }
+    .item { column-gap: var(--space-4); }
+  }
+</style>

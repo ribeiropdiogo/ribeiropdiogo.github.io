@@ -1,0 +1,41 @@
+---
+interface Props {
+  /** id of the element whose text gets copied */
+  target: string;
+  label: string;
+}
+const { target, label } = Astro.props;
+---
+<button type="button" class="copy" data-copy-target={target} data-label={label}>{label}</button>
+
+<script>
+  document.addEventListener('click', async (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-copy-target]');
+    if (!button) return;
+    const source = document.getElementById(button.dataset.copyTarget!);
+    if (!source) return;
+    const label = button.dataset.label!;
+    try {
+      await navigator.clipboard.writeText(source.textContent!.replace(/\s+\n/g, '\n').trim());
+      button.textContent = 'Copied';
+    } catch {
+      button.textContent = 'Copy failed, select the text instead';
+    }
+    setTimeout(() => (button.textContent = label), 2000);
+  });
+</script>
+
+<style>
+  .copy {
+    font: inherit;
+    font-size: var(--step--1);
+    font-weight: 500;
+    padding: 0.2rem 0.65rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .copy:hover { border-color: var(--accent); }
+</style>

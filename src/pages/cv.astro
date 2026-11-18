@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import { education, work, hardSkills, softSkills, peerReview } from '../data/cv';
+import { courseName, getCourses, getPublications, highlightMe } from '../lib/entries';
+
+const pubs = await getPublications();
+const courses = await getCourses();
+---
+<Base title="CV" description="Curriculum vitae of Diogo Ribeiro: education, experience, publications and teaching.">
+  <div class="head">
+    <h1>CV</h1>
+    <button type="button" class="print" onclick="window.print()">Print or save as PDF</button>
+  </div>
+
+  <section aria-labelledby="edu">
+    <h2 id="edu">Education</h2>
+    <ul class="rows">
+      {education.map((e) => (
+        <li><span class="when">{e.year}</span><span><strong>{e.degree}</strong><span class="org">{e.org}</span></span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="work">
+    <h2 id="work">Work experience</h2>
+    <ul class="rows">
+      {work.map((w) => (
+        <li><span class="when">{w.period}</span><span><strong>{w.role}</strong><span class="org">{w.org}</span></span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="skills">
+    <h2 id="skills">Skills</h2>
+    <div class="skills">
+      <div>
+        <h3>Hard skills</h3>
+        <ul class="chips">{hardSkills.map((s) => <li>{s}</li>)}</ul>
+      </div>
+      <div>
+        <h3>Soft skills</h3>
+        <ul class="chips">{softSkills.map((s) => <li>{s}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="pubs">
+    <h2 id="pubs">Publications</h2>
+    <ol class="cites">
+      {pubs.map((p) => (
+        <li><a class="title" href={p.data.permalink + '/'}>{p.data.title}</a><span set:html={highlightMe(p.data.citation)} /></li>
+      ))}
+    </ol>
+  </section>
+
+  <section aria-labelledby="teach">
+    <h2 id="teach">Teaching</h2>
+    <ul class="rows">
+      {courses.map((c) => (
+        <li><span class="when">{c.data.title}</span><span><strong>{courseName(c)}</strong><span class="org">{c.data.venue}</span></span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="review">
+    <h2 id="review">Peer review activities</h2>
+    <ul class="plain">
+      {peerReview.map((r) => <li><a href={r.href}>{r.name}</a></li>)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-4); }
+  .print {
+    font: inherit;
+    font-size: var(--step--1);
+    font-weight: 500;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .print:hover { border-color: var(--accent); }
+
+  section { margin-top: var(--space-7); }
+  h2 { font-size: var(--step-1); padding-bottom: var(--space-2); border-bottom: 1px solid var(--rule); }
+  h3 { font-size: var(--step-0); color: var(--muted); font-weight: 500; margin-bottom: var(--space-3); }
+
+  .rows, .plain, .cites { list-style: none; padding: 0; margin: 0; }
+  .rows li {
+    display: grid;
+    grid-template-columns: 10.5rem 1fr;
+    gap: var(--space-1) var(--space-5);
+    padding: var(--space-2) 0;
+  }
+  .when { color: var(--faint); font-size: var(--step--1); padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
+  strong { font-weight: 600; }
+  .org { display: block; color: var(--muted); font-size: var(--step--1); }
+
+  .skills { display: grid; gap: var(--space-5); }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; padding: 0; margin: 0; }
+  .chips li {
+    padding: 0.1rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: var(--step--1);
+  }
+
+  .cites li { padding: var(--space-3) 0; color: var(--muted); font-size: var(--step--1); }
+  .cites li + li { border-top: 1px solid var(--rule); }
+  .cites .title { display: block; font-size: var(--step-0); font-weight: 500; color: var(--ink); margin-bottom: var(--space-1); }
+  .cites :global(strong) { color: var(--ink); }
+
+  .plain li { padding: var(--space-1) 0; }
+
+  @media (max-width: 40rem) {
+    .rows li { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    .print { display: none; }
+    section { break-inside: avoid-page; }
+  }
+</style>
