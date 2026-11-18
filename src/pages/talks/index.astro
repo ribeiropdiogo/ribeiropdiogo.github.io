@@ -41,8 +41,6 @@ const paperFor = (title: string) => pubs.find((p) => p.data.title === title);
   .where { margin: 0; color: var(--muted); font-size: var(--step--1); }
   .loc { display: block; color: var(--faint); }
 
-  /* Secondary links: quiet until hovered so the title stays the focus. */
-  .talk-links { display: flex; gap: var(--space-3); list-style: none; padding: 0; margin: var(--space-2) 0 0; font-size: var(--step--1); }
-  .talk-links a { color: var(--faint); text-decoration-color: var(--rule); }
-  .talk-links a:hover { color: var(--accent-ink); text-decoration-color: var(--accent); }
+  /* Same treatment as the links on the Publications page. */
+  .talk-links { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); list-style: none; padding: 0; margin: var(--space-2) 0 0; font-size: var(--step--1); font-weight: 500; }
 </style>
