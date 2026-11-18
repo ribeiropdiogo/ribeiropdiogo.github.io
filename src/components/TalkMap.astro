@@ -51,12 +51,34 @@ const path = geoPath(projection).digits(1);
 const countries = feature(world as any, (world as any).objects.countries) as unknown as FeatureCollection;
 const land = countries.features.map((f) => path(f)).filter(Boolean).join('');
 
-const markers = list.map((p) => {
+// Places closer than this on the map (e.g. Braga and Porto) share one marker so dots and labels don't collide.
+const MERGE_PX = 24;
+type Cluster = { names: string[]; talks: Talk[]; points: [number, number][] };
+const clusters: Cluster[] = [];
+for (const p of list) {
   const [x, y] = projection([p.lng, p.lat])!;
-  const href = p.talks.length === 1 ? p.talks[0].data.permalink + '/' : `/talks/#talk-${p.talks[0].id}`;
-  const label = `${p.name}: ${p.talks.map((t) => t.data.title).join('; ')}`;
+  const near = clusters.find((c) => c.points.some(([cx, cy]) => Math.hypot(cx - x, cy - y) < MERGE_PX));
+  if (near) {
+    near.names.push(p.name);
+    near.talks.push(...p.talks);
+    near.points.push([x, y]);
+  } else {
+    clusters.push({ names: [p.name], talks: [...p.talks], points: [[x, y]] });
+  }
+}
+
+const joinNames = (names: string[]) =>
+  names.length < 2 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+
+const markers = clusters.map((c) => {
+  const x = c.points.reduce((sum, [px]) => sum + px, 0) / c.points.length;
+  const y = c.points.reduce((sum, [, py]) => sum + py, 0) / c.points.length;
+  const ordered = [...c.talks].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  const name = joinNames([...c.names].sort());
+  const href = ordered.length === 1 ? ordered[0].data.permalink + '/' : `/talks/#talk-${ordered[0].id}`;
+  const label = `${name}: ${ordered.map((t) => t.data.title).join('; ')}`;
   const anchorEnd = x > W * 0.7;
-  return { ...p, x, y, href, label, anchorEnd };
+  return { name, talks: ordered, x, y, href, label, anchorEnd };
 });
 
 const cityCount = list.length;
