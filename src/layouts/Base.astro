@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import { Image, getImage } from 'astro:assets';
+import avatar from '../assets/avatar.jpg';
 import { SITE, LINKS, NAV } from '../site';
 
 interface Props {
@@ -11,7 +13,8 @@ interface Props {
 const { title, description = SITE.description, type = 'website' } = Astro.props;
 const pageTitle = title ? `${title} - ${SITE.name}` : SITE.name;
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
-const ogImage = new URL(SITE.avatar, SITE.url).href;
+const og = await getImage({ src: avatar, width: 512, height: 512, format: 'jpg' });
+const ogImage = new URL(og.src, SITE.url).href;
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 // Detail pages live under a singular prefix (/publication/x), so map them to their section.
@@ -55,7 +58,7 @@ const isCurrent = (href: string) => {
     <div class="shell">
       <header class="rail">
         <a class="identity" href="/" aria-label={`${SITE.name}, home`}>
-          <img class="avatar" src={SITE.avatar} alt="" width="88" height="88" />
+          <Image class="avatar" src={avatar} alt="" width={88} height={88} densities={[1, 2]} format="webp" quality={80} loading="eager" fetchpriority="high" />
           <span class="name">{SITE.name}</span>
         </a>
         <ul class="roles">

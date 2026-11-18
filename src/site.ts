@@ -4,7 +4,6 @@ export const SITE = {
   name: 'Diogo Ribeiro',
   description:
     'Diogo Ribeiro: PhD student at the University of Minho and Research Assistant at HasLab INESC TEC, working on truth discovery and reputation systems.',
-  avatar: '/images/8500.jpg',
   location: 'Braga, Portugal',
   email: 'diogo.p.ribeiro@inesctec.pt',
   roles: [
