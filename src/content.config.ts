@@ -33,6 +33,7 @@ const talks = defineCollection({
     venue: z.string(),
     date: z.coerce.date(),
     location: z.string().optional(),
+    slidesurl: optionalUrl,
   }),
 });
 

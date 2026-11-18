@@ -48,7 +48,7 @@ citation: 'Ribeiro, D., ... (YYYY). "Paper title." Venue.'
 ---
 ```
 
-Your name is highlighted in citations automatically. If a talk has the same title, the paper and talk pages link to each other.
+Your name is highlighted in citations automatically. If a talk has the same title, the paper and talk pages link to each other, and the paper also shows the talk's slides.
 
 ## Add a talk
 
@@ -62,9 +62,8 @@ permalink: /talks/YYYY-MM-DD
 venue: "Event name"
 date: YYYY-MM-DD
 location: "City, Country"
+slidesurl: '/files/slides.pdf'   # optional, put the file in public/files/
 ---
-
-[Download slides](/files/slides.pdf)
 
 Abstract in markdown.
 ```
