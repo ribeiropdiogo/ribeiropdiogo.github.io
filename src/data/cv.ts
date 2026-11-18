@@ -31,7 +31,8 @@ export const hardSkills = [
 
 export const softSkills = ['Teamwork', 'Creative', 'Motivated', 'Eager to Learn', 'Positive'];
 
-export const peerReview = [
-  { name: 'Journal of Cybersecurity', href: 'https://academic.oup.com/cybersecurity' },
-  { name: 'Hawaii International Conference on System Sciences (HICSS)', href: 'https://hicss.hawaii.edu' },
+// One entry per journal or conference; add a year to `years` each time you review for it again.
+export const peerReview: { name: string; href: string; years: number[] }[] = [
+  { name: 'Journal of Cybersecurity', href: 'https://academic.oup.com/cybersecurity', years: [2026] },
+  { name: 'Hawaii International Conference on System Sciences (HICSS)', href: 'https://hicss.hawaii.edu', years: [2026] },
 ];
