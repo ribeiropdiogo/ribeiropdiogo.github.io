@@ -17,7 +17,7 @@ const reviews = peerReview
 <Base title="CV" description="Curriculum vitae of Diogo Ribeiro: education, experience, publications and teaching.">
   <div class="head">
     <h1>CV</h1>
-    <button type="button" class="print" onclick="window.print()">Print or save as PDF</button>
+    <a class="print" href="/files/diogo-ribeiro-cv.pdf" download>Download PDF</a>
   </div>
 
   <section aria-labelledby="edu">
@@ -92,6 +92,7 @@ const reviews = peerReview
     background: var(--surface);
     color: var(--ink);
     cursor: pointer;
+    text-decoration: none;
   }
   .print:hover { border-color: var(--accent); }
 
