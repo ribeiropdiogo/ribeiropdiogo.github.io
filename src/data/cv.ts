@@ -35,4 +35,5 @@ export const softSkills = ['Teamwork', 'Creative', 'Motivated', 'Eager to Learn'
 export const peerReview: { name: string; href: string; years: number[] }[] = [
   { name: 'Journal of Cybersecurity', href: 'https://academic.oup.com/cybersecurity', years: [2026] },
   { name: 'Hawaii International Conference on System Sciences (HICSS)', href: 'https://hicss.hawaii.edu', years: [2026] },
+  { name: 'Humanities and Social Sciences Communications', href: 'https://www.nature.com/palcomms/', years: [2026] },
 ];
